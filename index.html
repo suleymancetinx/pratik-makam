@@ -50,7 +50,7 @@ const MAKAMLAR = [
     kametUrl   : 'https://ia600106.us.archive.org/31/items/rast-mevlid/saba-kamet.mp3',
     tesbihatUrl: 'https://ia600106.us.archive.org/31/items/rast-mevlid/saba-tesbihat.mp3',
     asrUrl     : 'https://ia600106.us.archive.org/31/items/rast-mevlid/saba-bakara.mp3',
-    kasideUrl  : 'https://ia600106.us.archive.org/31/items/rast-mevlid/saba-mevlid.mp3',
+    kasideUrl  : 'https://ia600106.us.archive.org/31/items/rast-mevlid/saba-mevlid.mp3', kasideLabel:'Mevlid',
     ilahiUrl   : 'https://ia600106.us.archive.org/31/items/rast-mevlid/saba-ilahi.mp3',
     bgColor:'#0078d7', smColor1:'#00b4d8', smColor1b:'#0096c7',
     smColor2:'#0077b6', smColor3:'#023e8a', smColor4:'#48cae4',
@@ -78,7 +78,7 @@ const MAKAMLAR = [
     kametUrl   : 'https://ia600106.us.archive.org/31/items/rast-mevlid/rast-kamet.mp3',
     tesbihatUrl: 'https://ia600106.us.archive.org/31/items/rast-mevlid/rast-tesbihat.mp3',
     asrUrl     : 'https://ia600106.us.archive.org/31/items/rast-mevlid/rast-bakara.mp3',
-    kasideUrl  : 'https://ia600106.us.archive.org/31/items/rast-mevlid/rast-mevlid.mp3',
+    kasideUrl  : 'https://ia600106.us.archive.org/31/items/rast-mevlid/rast-mevlid.mp3', kasideLabel:'Mevlid',
     ilahiUrl   : 'https://ia600106.us.archive.org/31/items/rast-mevlid/rast-ilahi.mp3',
     bgColor:'#d97706', smColor1:'#fbbf24', smColor1b:'#f59e0b',
     smColor2:'#b45309', smColor3:'#92400e', smColor4:'#fcd34d',
@@ -92,7 +92,7 @@ const MAKAMLAR = [
     kametUrl   : 'https://ia600106.us.archive.org/31/items/rast-mevlid/segah-kamet.mp3',
     tesbihatUrl: 'https://ia600106.us.archive.org/31/items/rast-mevlid/segah-tesbihat.mp3',
     asrUrl     : 'https://ia600106.us.archive.org/31/items/rast-mevlid/segah-bakara.mp3',
-    kasideUrl  : 'https://ia600106.us.archive.org/31/items/rast-mevlid/segah-tekbiri-salat.mp3',
+    kasideUrl  : 'https://ia600106.us.archive.org/31/items/rast-mevlid/segah-tekbiri-salat.mp3', kasideLabel:'Salat',
     ilahiUrl   : 'https://ia600106.us.archive.org/31/items/rast-mevlid/segah-ilahi.mp3',
     bgColor:'#7c3aed', smColor1:'#a78bfa', smColor1b:'#8b5cf6',
     smColor2:'#6d28d9', smColor3:'#4c1d95', smColor4:'#c4b5fd',
@@ -368,8 +368,8 @@ const MAKAMLAR = [
   .small-grid{
     display:grid;
     grid-template-columns:1fr 1fr;
-    grid-template-rows:1fr 1fr;
-    aspect-ratio:3/2;
+    grid-template-rows:1fr 1fr 1fr;
+    aspect-ratio:1/1;
   }
   .split-tile-wrap{
     display:flex;
@@ -820,43 +820,18 @@ MAKAMLAR.forEach(function(m,i){
     return t;
   }
 
-  /* ── Cell 1 (row1 col1): Split Kamet / Tesbihat ── */
-  var splitWrap=document.createElement('div');
-  splitWrap.className='split-tile-wrap';
-
-  var kEmpty=!m.kametUrl||m.kametUrl.trim()==='';
-  var kHalf=document.createElement('div');
-  kHalf.className='split-half'+(kEmpty?' empty-tile':'');
-  kHalf.style.background=m.smColor1;
-  kHalf.innerHTML='<span class="sm-label">Kamet</span>';
-  if(!kEmpty){
-    kHalf.addEventListener('click',(function(el,u){
-      return function(){playEl(el,u,m.makam+' – Kamet');};
-    })(kHalf,m.kametUrl));
-  }
-
-  var tEmpty=!m.tesbihatUrl||m.tesbihatUrl.trim()==='';
-  var tHalf=document.createElement('div');
-  tHalf.className='split-half'+(tEmpty?' empty-tile':'');
-  tHalf.style.background=m.smColor1b;
-  tHalf.innerHTML='<span class="sm-label">Tesbihat</span>';
-  if(!tEmpty){
-    tHalf.addEventListener('click',(function(el,u){
-      return function(){playEl(el,u,m.makam+' – Tesbihat');};
-    })(tHalf,m.tesbihatUrl));
-  }
-  splitWrap.appendChild(kHalf);
-  splitWrap.appendChild(tHalf);
-  sg.appendChild(splitWrap);
-
-  /* ── Cell 2 (row1 col2): İlahi ── */
+  /* ── 3-row × 2-col grid ──
+     Row 1: Kamet + İlahi
+     Row 2: Tesbihat + Aşr
+     Row 3: Kaside/Mevlid/Salat (full width)
+  */
+  sg.appendChild(mkSm('Kamet', m.kametUrl, m.smColor1));
   sg.appendChild(mkSm('İlahi', m.ilahiUrl, m.smColor4));
-
-  /* ── Cell 3 (row2 col1): Kaside ── */
-  sg.appendChild(mkSm('Kaside', m.kasideUrl, m.smColor3));
-
-  /* ── Cell 4 (row2 col2): Aşr-ı Şerif ── */
-  sg.appendChild(mkSm('Aşr-ı Şerif', m.asrUrl, m.smColor2));
+  sg.appendChild(mkSm('Tesbihat', m.tesbihatUrl, m.smColor1b));
+  sg.appendChild(mkSm(m.kasideLabel||'Kaside', m.kasideUrl, m.smColor3));
+  var as = mkSm('Aşr-ı Şerif', m.asrUrl, m.smColor2);
+  as.style.gridColumn = '1 / -1';
+  sg.appendChild(as);
 
   col.appendChild(sg);
   outerGrid.appendChild(col);
