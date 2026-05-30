@@ -1,1 +1,841 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Makam Referans Panosu</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Inter:wght@300;400;600;700;900&display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+tailwind.config = {
+  theme: {
+    extend: {
+      fontFamily: { sans: ['Inter','sans-serif'], arabic: ['Amiri','serif'] },
+    }
+  }
+}
+</script>
 
+<!-- ╔══════════════════════════════════════════════════════════════╗
+     ║            MAKAM VERİ MERKEZİ  –  Sadece burası düzenlenir ║
+     ╚══════════════════════════════════════════════════════════════╝
+
+  Yapı:
+  {
+    makam : 'Makam Adı',
+    vakit : 'Vakit Adı',
+    ezanUrl  : 'https://...',   ← büyük kare (ezan)
+    kametUrl : 'https://...',   ← küçük kare 1a
+    tesbihatUrl : '',           ← küçük kare 1b (split alt)
+    asrUrl   : '',              ← küçük kare 2
+    kasideUrl: '',              ← küçük kare 3
+    ilahiUrl : '',              ← küçük kare 4
+    bgColor  : '#hex',         ← büyük karenin ana rengi
+    smColor1 : '#hex',         ← küçük kare 1 üst rengi (kamet)
+    smColor1b: '#hex',         ← küçük kare 1 alt rengi (tesbihat)
+    smColor2 : '#hex',
+    smColor3 : '#hex',
+    smColor4 : '#hex',
+    icon     : '🔤',
+  }
+  ════════════════════════════════════════════════════════════════ -->
+<script>
+const MAKAMLAR = [
+
+  /* ─── SABAH · SABA ─── */
+  {
+    makam:'Saba', vakit:'Sabah',
+    ezanUrl    : 'https://dn711100.ca.archive.org/0/items/saba-ezan/saba-ezan.mp3',
+    kametUrl   : 'https://ia600106.us.archive.org/31/items/rast-mevlid/saba-kamet.mp3',
+    tesbihatUrl: 'https://ia600106.us.archive.org/31/items/rast-mevlid/saba-tesbihat.mp3',
+    asrUrl     : 'https://ia600106.us.archive.org/31/items/rast-mevlid/saba-bakara.mp3',
+    kasideUrl  : 'https://ia600106.us.archive.org/31/items/rast-mevlid/saba-mevlid.mp3', kasideLabel:'Mevlid',
+    ilahiUrl   : 'https://ia600106.us.archive.org/31/items/rast-mevlid/saba-ilahi.mp3',
+    bgColor:'#0078d7', smColor1:'#00b4d8', smColor1b:'#0096c7',
+    smColor2:'#0077b6', smColor3:'#023e8a', smColor4:'#48cae4',
+    icon:'🌙',
+  },
+
+  /* ─── ÖĞLE · UŞŞAK ─── */
+  {
+    makam:'Uşşak', vakit:'Öğle',
+    ezanUrl    : 'https://ia600709.us.archive.org/16/items/ussak-ezan_202605/ussak-ezan.mp3',
+    kametUrl   : 'https://ia600106.us.archive.org/31/items/rast-mevlid/ussak-kamet.mp3',
+    tesbihatUrl: 'https://ia600106.us.archive.org/31/items/rast-mevlid/ussak-tesbihat.mp3',
+    asrUrl     : 'https://ia600106.us.archive.org/31/items/rast-mevlid/ussak-bakara.mp3',
+    kasideUrl  : 'https://ia600106.us.archive.org/31/items/rast-mevlid/ussak-kaside.mp3',
+    ilahiUrl   : 'https://ia600106.us.archive.org/31/items/rast-mevlid/ussak-ilahi.mp3',
+    bgColor:'#16a34a', smColor1:'#4ade80', smColor1b:'#22c55e',
+    smColor2:'#15803d', smColor3:'#166534', smColor4:'#86efac',
+    icon:'☀️',
+  },
+
+  /* ─── İKİNDİ · RAST ─── */
+  {
+    makam:'Rast', vakit:'İkindi',
+    ezanUrl    : 'https://ia600509.us.archive.org/16/items/rast-ezan/rast-ezan.mp3',
+    kametUrl   : 'https://ia600106.us.archive.org/31/items/rast-mevlid/rast-kamet.mp3',
+    tesbihatUrl: 'https://ia600106.us.archive.org/31/items/rast-mevlid/rast-tesbihat.mp3',
+    asrUrl     : 'https://ia600106.us.archive.org/31/items/rast-mevlid/rast-bakara.mp3',
+    kasideUrl  : 'https://ia600106.us.archive.org/31/items/rast-mevlid/rast-mevlid.mp3', kasideLabel:'Mevlid',
+    ilahiUrl   : 'https://ia600106.us.archive.org/31/items/rast-mevlid/rast-ilahi.mp3',
+    bgColor:'#d97706', smColor1:'#fbbf24', smColor1b:'#f59e0b',
+    smColor2:'#b45309', smColor3:'#92400e', smColor4:'#fcd34d',
+    icon:'🌤️',
+  },
+
+  /* ─── AKŞAM · SEGAH ─── */
+  {
+    makam:'Segah', vakit:'Akşam',
+    ezanUrl    : 'https://ia903205.us.archive.org/7/items/segah-ezan/segah-ezan.mp3',
+    kametUrl   : 'https://ia600106.us.archive.org/31/items/rast-mevlid/segah-kamet.mp3',
+    tesbihatUrl: 'https://ia600106.us.archive.org/31/items/rast-mevlid/segah-tesbihat.mp3',
+    asrUrl     : 'https://ia600106.us.archive.org/31/items/rast-mevlid/segah-bakara.mp3',
+    kasideUrl  : 'https://ia600106.us.archive.org/31/items/rast-mevlid/segah-tekbiri-salat.mp3', kasideLabel:'Salat',
+    ilahiUrl   : 'https://ia600106.us.archive.org/31/items/rast-mevlid/segah-ilahi.mp3',
+    bgColor:'#7c3aed', smColor1:'#a78bfa', smColor1b:'#8b5cf6',
+    smColor2:'#6d28d9', smColor3:'#4c1d95', smColor4:'#c4b5fd',
+    icon:'🌆',
+  },
+
+  /* ─── YATSI · HİCAZ ─── */
+  {
+    makam:'Hicaz', vakit:'Yatsı',
+    ezanUrl    : 'https://ia601904.us.archive.org/25/items/hicaz-ezan/hicaz-ezan.mp3',
+    kametUrl   : 'https://ia600106.us.archive.org/31/items/rast-mevlid/hicaz-kamet.mp3',
+    tesbihatUrl: 'https://ia600106.us.archive.org/31/items/rast-mevlid/hicaz-tesbihat.mp3',
+    asrUrl     : 'https://ia600106.us.archive.org/31/items/rast-mevlid/hicaz-bakara.mp3',
+    kasideUrl  : 'https://ia600106.us.archive.org/31/items/rast-mevlid/hicaz-kaside.mp3',
+    ilahiUrl   : 'https://ia600106.us.archive.org/31/items/rast-mevlid/hicaz-ilahi.mp3',
+    bgColor:'#dc2626', smColor1:'#f87171', smColor1b:'#ef4444',
+    smColor2:'#b91c1c', smColor3:'#7f1d1d', smColor4:'#fca5a5',
+    icon:'🌃',
+  },
+
+  /* ─── SELA · HÜSEYNİ ─── */
+  {
+    makam:'Hüseyni', vakit:'Sela',
+    ezanUrl    : 'https://ia801606.us.archive.org/14/items/huseyni-sala/huseyni-sala.mp3',
+    kametUrl   : 'https://ia600106.us.archive.org/31/items/rast-mevlid/huseyni-kamet.mp3',
+    tesbihatUrl: 'https://ia600106.us.archive.org/31/items/rast-mevlid/huseyni-tesbihat.mp3',
+    asrUrl     : 'https://ia600106.us.archive.org/31/items/rast-mevlid/huseyni-bakara.mp3',
+    kasideUrl  : 'https://ia600106.us.archive.org/31/items/rast-mevlid/huseyni-kaside.mp3',
+    ilahiUrl   : 'https://ia600106.us.archive.org/31/items/rast-mevlid/huseyni-ilahi.mp3',
+    bgColor:'#0891b2', smColor1:'#22d3ee', smColor1b:'#06b6d4',
+    smColor2:'#0e7490', smColor3:'#164e63', smColor4:'#67e8f9',
+    icon:'🕌',
+  },
+
+];
+</script>
+<!-- ═══════════════ VERİ MERKEZİ SONU ═══════════════ -->
+
+<style>
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{
+    font-family:'Inter',sans-serif;
+    background:#111;
+    color:#fff;
+    min-height:100vh;
+    padding-bottom:160px;
+  }
+
+  /* ── TOPBAR ── */
+  #topbar{
+    position:sticky;top:0;z-index:300;
+    height:56px;
+    display:flex;align-items:center;justify-content:center;
+    background:rgba(10,10,10,.92);
+    border-bottom:1px solid rgba(255,255,255,.08);
+    backdrop-filter:blur(16px);
+    -webkit-backdrop-filter:blur(16px);
+    position:relative;
+  }
+  .topbar-center{
+    display:flex;flex-direction:column;align-items:center;
+    line-height:1.2;
+  }
+  .topbar-ar{
+    font-family:'Amiri',serif;
+    font-size:clamp(1rem,3.5vw,1.3rem);
+    color:#e8c97a;
+  }
+  .topbar-tr{
+    font-size:clamp(.52rem,1.6vw,.65rem);
+    font-weight:300;letter-spacing:.22em;text-transform:uppercase;
+    color:rgba(255,255,255,.4);
+    margin-top:1px;
+  }
+  #ham-btn{
+    position:absolute;right:clamp(12px,3vw,20px);top:50%;transform:translateY(-50%);
+    width:40px;height:40px;
+    background:rgba(255,255,255,.07);
+    border:1px solid rgba(255,255,255,.12);
+    border-radius:8px;
+    cursor:pointer;
+    display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;
+    transition:background .15s;
+  }
+  #ham-btn:hover{background:rgba(255,255,255,.13);}
+  #ham-btn span{
+    display:block;width:18px;height:2px;
+    background:#fff;border-radius:2px;
+    transition:transform .25s ease,opacity .2s;
+  }
+  #ham-btn.open span:nth-child(1){transform:translateY(7px) rotate(45deg);}
+  #ham-btn.open span:nth-child(2){opacity:0;}
+  #ham-btn.open span:nth-child(3){transform:translateY(-7px) rotate(-45deg);}
+
+  /* ── DRAWER ── */
+  #drawer{
+    position:fixed;top:0;right:0;bottom:0;
+    width:min(300px,85vw);
+    z-index:400;
+    background:rgba(10,12,18,.98);
+    border-left:1px solid rgba(255,255,255,.1);
+    backdrop-filter:blur(24px);
+    transform:translateX(100%);
+    transition:transform .3s cubic-bezier(.4,0,.2,1);
+    display:flex;flex-direction:column;
+    overflow-y:auto;
+  }
+  #drawer.open{transform:translateX(0);}
+  #drawer-overlay{
+    position:fixed;inset:0;z-index:399;
+    background:rgba(0,0,0,.55);
+    opacity:0;pointer-events:none;
+    transition:opacity .3s;
+  }
+  #drawer-overlay.open{opacity:1;pointer-events:all;}
+  .drawer-header{
+    display:flex;align-items:center;justify-content:space-between;
+    padding:18px 20px 14px;
+    border-bottom:1px solid rgba(255,255,255,.09);
+  }
+  .drawer-logo{font-family:'Amiri',serif;font-size:1.1rem;color:#e8c97a;}
+  #drawer-close{
+    width:30px;height:30px;background:none;border:none;
+    color:rgba(255,255,255,.5);font-size:1.2rem;cursor:pointer;
+    border-radius:6px;display:flex;align-items:center;justify-content:center;
+    transition:background .15s,color .15s;
+  }
+  #drawer-close:hover{background:rgba(255,255,255,.08);color:#fff;}
+  .drawer-nav{display:flex;flex-direction:column;padding:10px 0;flex:1;}
+  .drawer-item{
+    display:flex;align-items:center;gap:12px;
+    padding:13px 20px;
+    cursor:pointer;color:#f0ede8;
+    font-size:.9rem;font-weight:600;
+    border:none;background:none;text-align:left;width:100%;
+    transition:background .15s;
+  }
+  .drawer-item:hover{background:rgba(255,255,255,.06);}
+  .drawer-item-icon{font-size:1rem;opacity:.7;}
+  .drawer-sep{height:1px;background:rgba(255,255,255,.08);margin:8px 20px;}
+
+  /* ── MODALS ── */
+  .modal-overlay{
+    position:fixed;inset:0;z-index:500;
+    background:rgba(0,0,0,.72);
+    display:flex;align-items:center;justify-content:center;
+    padding:20px;
+    opacity:0;pointer-events:none;
+    transition:opacity .22s;
+  }
+  .modal-overlay.open{opacity:1;pointer-events:all;}
+  .modal{
+    background:rgba(14,16,24,.98);
+    border:1px solid rgba(255,255,255,.1);
+    border-radius:16px;
+    width:100%;max-width:460px;
+    max-height:80vh;overflow-y:auto;
+    padding:24px 22px 22px;
+    transform:scale(.95) translateY(10px);
+    transition:transform .22s cubic-bezier(.4,0,.2,1);
+  }
+  .modal-overlay.open .modal{transform:scale(1) translateY(0);}
+  .modal-head{
+    display:flex;align-items:center;justify-content:space-between;
+    margin-bottom:18px;
+  }
+  .modal-title{font-size:1.05rem;font-weight:900;color:#e8c97a;}
+  .modal-close{
+    width:28px;height:28px;background:rgba(255,255,255,.07);
+    border:1px solid rgba(255,255,255,.1);border-radius:6px;
+    color:rgba(255,255,255,.5);font-size:.95rem;cursor:pointer;
+    display:flex;align-items:center;justify-content:center;
+    transition:background .15s,color .15s;
+  }
+  .modal-close:hover{background:rgba(255,255,255,.12);color:#fff;}
+  .modal-body{font-size:.85rem;line-height:1.75;color:rgba(240,237,232,.8);}
+  .modal-body p{margin-bottom:11px;}
+  .modal-body a{color:#e8c97a;text-decoration:none;}
+  .modal-body a:hover{text-decoration:underline;}
+  .modal-body strong{color:#fff;}
+  .contact-row{
+    display:flex;align-items:center;gap:10px;
+    padding:10px 14px;margin-top:8px;
+    background:rgba(255,255,255,.05);
+    border:1px solid rgba(255,255,255,.09);border-radius:10px;
+    font-size:.83rem;color:#f0ede8;
+  }
+
+  /* ── METRO GRID ── */
+  #main{
+    max-width:1100px;
+    margin:0 auto;
+    padding:clamp(16px,3vw,32px) clamp(12px,3vw,24px) 0;
+    display:flex;flex-direction:column;
+    gap:clamp(20px,3vw,36px);
+  }
+
+  /* one makam block */
+  .metro-block{
+    display:flex;flex-direction:column;
+    gap:0;
+  }
+
+  /* big tile row: contains just the big ezan tile + label */
+  .metro-big-row{
+    display:grid;
+    grid-template-columns:1fr 1fr 1fr;
+    gap:0;
+  }
+
+  /* ── BIG TILE (ezan) ── */
+  .big-tile{
+    aspect-ratio:3/2;
+    display:flex;flex-direction:column;
+    align-items:center;justify-content:center;
+    cursor:pointer;
+    position:relative;
+    overflow:hidden;
+    transition:filter .15s, transform .13s;
+    user-select:none;
+    -webkit-tap-highlight-color:transparent;
+  }
+  .big-tile:active,.big-tile.pressing{transform:scale(.95);}
+  .big-tile.playing::after{
+    content:'';
+    position:absolute;inset:0;
+    background:rgba(255,255,255,.12);
+    pointer-events:none;
+  }
+  .big-tile.empty-tile{cursor:default;filter:brightness(.45);}
+  .big-tile.empty-tile:active{transform:none;}
+
+  .big-tile-icon{
+    font-size:clamp(2rem,6vw,3.5rem);
+    margin-bottom:clamp(6px,1.5vw,12px);
+    opacity:.25;
+    filter:grayscale(1);
+  }
+  .big-tile-makam{
+    font-size:clamp(1rem,3.5vw,2rem);
+    font-weight:900;
+    letter-spacing:.02em;
+    color:#fff;
+    line-height:1;
+  }
+  .big-tile-vakit{
+    font-size:clamp(.55rem,1.6vw,.8rem);
+    font-weight:400;
+    letter-spacing:.25em;
+    text-transform:uppercase;
+    color:rgba(255,255,255,.55);
+    margin-top:4px;
+  }
+  .big-tile-ezan{
+    font-size:clamp(.5rem,1.4vw,.7rem);
+    font-weight:700;
+    letter-spacing:.3em;
+    text-transform:uppercase;
+    color:rgba(255,255,255,.35);
+    margin-top:clamp(6px,1.5vw,12px);
+    border:1px solid rgba(255,255,255,.2);
+    padding:2px 8px;
+    border-radius:2px;
+  }
+  /* playing ring */
+  .big-tile.playing{
+    outline:3px solid rgba(255,255,255,.7);
+    outline-offset:-3px;
+  }
+
+  /* ── SMALL TILES: 2×2 grid ── */
+  .small-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    grid-template-rows:1fr 1fr 1fr;
+    aspect-ratio:1/1;
+  }
+  .split-tile-wrap{
+    display:flex;
+    flex-direction:column;
+  }
+  .sm-tile{
+    display:flex;align-items:center;justify-content:center;
+    cursor:pointer;
+    position:relative;
+    overflow:hidden;
+    transition:filter .15s,transform .13s;
+    user-select:none;
+    -webkit-tap-highlight-color:transparent;
+  }
+  .split-half{
+    flex:1;
+    display:flex;align-items:center;justify-content:center;
+    cursor:pointer;
+    position:relative;
+    overflow:hidden;
+    transition:filter .15s,transform .13s;
+    user-select:none;
+    -webkit-tap-highlight-color:transparent;
+  }
+  .sm-tile:active,.sm-tile.pressing,
+  .split-half:active,.split-half.pressing{transform:scale(.94);}
+  .sm-tile.playing,.split-half.playing{
+    outline:2px solid rgba(255,255,255,.75);
+    outline-offset:-2px;
+  }
+  .sm-tile.empty-tile,.split-half.empty-tile{
+    cursor:default;filter:brightness(.4);
+  }
+  .sm-tile.empty-tile:active,.split-half.empty-tile:active{transform:none;}
+  .sm-label{
+    font-size:clamp(.55rem,1.5vw,.84rem);
+    font-weight:700;
+    letter-spacing:.03em;
+    color:#fff;
+    text-align:center;
+    padding:2px 3px;
+    line-height:1.2;
+  }
+
+  /* ── PLAYER BAR ── */
+  #player{
+    position:fixed;bottom:0;left:0;right:0;
+    z-index:250;
+    background:rgba(7,9,14,.96);
+    border-top:1px solid rgba(255,255,255,.1);
+    backdrop-filter:blur(22px) saturate(1.6);
+    -webkit-backdrop-filter:blur(22px) saturate(1.6);
+    transform:translateY(100%);
+    transition:transform .32s cubic-bezier(.4,0,.2,1);
+    padding:10px clamp(12px,3vw,24px) 12px;
+    display:flex;flex-direction:column;gap:8px;
+  }
+  #player.visible{transform:translateY(0);}
+
+  .pl-info{display:flex;align-items:center;gap:8px;min-width:0;}
+  .pl-dot{
+    width:7px;height:7px;border-radius:50%;
+    background:#e8c97a;flex-shrink:0;
+    animation:blink 1.4s ease-in-out infinite;
+  }
+  @keyframes blink{
+    0%,100%{opacity:1;transform:scale(1);}
+    50%{opacity:.3;transform:scale(.65);}
+  }
+  .pl-lbl{
+    font-size:.62rem;font-weight:300;letter-spacing:.12em;text-transform:uppercase;
+    color:rgba(255,255,255,.4);white-space:nowrap;flex-shrink:0;
+  }
+  .pl-track{
+    font-size:.85rem;font-weight:700;color:#f0ede8;
+    white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+    flex:1;min-width:0;
+  }
+  .pl-progress-wrap{display:flex;align-items:center;gap:8px;}
+  .pl-time{font-size:.6rem;font-weight:600;color:rgba(255,255,255,.4);white-space:nowrap;min-width:34px;}
+  .pl-time.right{text-align:right;}
+  #pl-seek{
+    flex:1;-webkit-appearance:none;appearance:none;
+    height:3px;border-radius:99px;cursor:pointer;
+    background:rgba(255,255,255,.15);outline:none;
+  }
+  #pl-seek::-webkit-slider-thumb{
+    -webkit-appearance:none;appearance:none;
+    width:13px;height:13px;border-radius:50%;
+    background:#e8c97a;cursor:pointer;
+    box-shadow:0 0 0 3px rgba(232,201,122,.22);
+    transition:transform .15s;
+  }
+  #pl-seek::-webkit-slider-thumb:hover{transform:scale(1.25);}
+  #pl-seek::-moz-range-thumb{
+    width:13px;height:13px;border-radius:50%;border:none;
+    background:#e8c97a;cursor:pointer;
+  }
+  .pl-controls{display:flex;align-items:center;justify-content:space-between;gap:8px;}
+  .pl-btns{display:flex;align-items:center;gap:6px;}
+  .pl-btn{
+    height:34px;
+    background:rgba(255,255,255,.07);
+    border:1px solid rgba(255,255,255,.12);
+    border-radius:8px;
+    color:#f0ede8;
+    font-family:'Inter',sans-serif;
+    font-size:.72rem;font-weight:700;
+    letter-spacing:.04em;
+    padding:0 12px;cursor:pointer;
+    display:flex;align-items:center;justify-content:center;gap:5px;
+    transition:background .15s,border-color .15s,transform .1s;
+    white-space:nowrap;
+  }
+  .pl-btn:hover{background:rgba(255,255,255,.12);border-color:rgba(255,255,255,.22);}
+  .pl-btn:active{transform:scale(.93);}
+  .pl-btn.primary{
+    background:rgba(232,201,122,.15);
+    border-color:rgba(232,201,122,.4);
+    color:#e8c97a;font-size:.88rem;padding:0 16px;
+  }
+  .pl-btn.primary:hover{background:rgba(232,201,122,.25);}
+  #pl-pause-icon{font-size:.95rem;}
+  .pl-btn.stop{
+    background:rgba(239,68,68,.15);
+    border-color:rgba(239,68,68,.38);
+    color:#fca5a5;
+  }
+  .pl-btn.stop:hover{background:rgba(239,68,68,.28);}
+  .pl-btn.speed-active{
+    background:rgba(168,85,247,.2);
+    border-color:rgba(168,85,247,.5);
+    color:#c4b5fd;
+  }
+  @media(max-width:480px){
+    .pl-btn{padding:0 8px;font-size:.68rem;}
+    .pl-btn.primary{padding:0 12px;}
+    .pl-lbl{display:none;}
+  }
+  ::-webkit-scrollbar{width:5px;}
+  ::-webkit-scrollbar-track{background:transparent;}
+  ::-webkit-scrollbar-thumb{background:rgba(255,255,255,.10);border-radius:99px;}
+</style>
+</head>
+<body>
+
+<!-- ══ TOPBAR ══ -->
+<div id="topbar">
+  <div class="topbar-center">
+    <div class="topbar-ar">بسم الله الرحمن الرحيم</div>
+    <div class="topbar-tr">Makam Referans Panosu</div>
+  </div>
+  <button id="ham-btn" aria-label="Menü">
+    <span></span><span></span><span></span>
+  </button>
+</div>
+
+<!-- ══ DRAWER OVERLAY ══ -->
+<div id="drawer-overlay"></div>
+
+<!-- ══ DRAWER ══ -->
+<div id="drawer">
+  <div class="drawer-header">
+    <div class="drawer-logo">🎵 Menü</div>
+    <button id="drawer-close">✕</button>
+  </div>
+  <nav class="drawer-nav">
+    <button class="drawer-item" id="menu-home">
+      <span class="drawer-item-icon">🏠</span> Ana Sayfa
+    </button>
+    <div class="drawer-sep"></div>
+    <button class="drawer-item" id="menu-about">
+      <span class="drawer-item-icon">📋</span> Hakkında
+    </button>
+    <button class="drawer-item" id="menu-contact">
+      <span class="drawer-item-icon">✉️</span> İletişim
+    </button>
+  </nav>
+</div>
+
+<!-- ══ HAKKINDA MODAL ══ -->
+<div class="modal-overlay" id="modal-about">
+  <div class="modal">
+    <div class="modal-head">
+      <div class="modal-title">📋 Hakkında</div>
+      <button class="modal-close" data-close="modal-about">✕</button>
+    </div>
+    <div class="modal-body">
+      <p><strong>Makam Referans Panosu</strong>, din görevlilerinin ezan, sela, kamet, ilahi, tesbihat, mevlid ve Kur'an-ı Kerim okumalarında kullanılan makamları kolayca dinleyip tanımalarına yardımcı olmak amacıyla geliştirilmiştir.</p>
+      <p>Her vakit için belirlenen <strong>geleneksel makamlar</strong> (Saba, Uşşak, Rast, Segah, Hicaz, Hüseyni) bu panoda sesli referanslarıyla sunulmaktadır. Zaman içinde tüm kategorilere yeni ses örnekleri eklenmeye devam edilecektir.</p>
+      <p>Uygulama; internet bağlantısı olan herhangi bir mobil cihaz veya bilgisayardan, kurulum gerektirmeksizin kullanılabilir.</p>
+      <p style="color:rgba(255,255,255,.35);font-size:.78rem;">Sürüm 3.0 · Süleyman Çetin tarafından &#10084 ile kodlanmıştır.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ══ İLETİŞİM MODAL ══ -->
+<div class="modal-overlay" id="modal-contact">
+  <div class="modal">
+    <div class="modal-head">
+      <div class="modal-title">✉️ İletişim</div>
+      <button class="modal-close" data-close="modal-contact">✕</button>
+    </div>
+    <div class="modal-body">
+      <p>Ses ekleme önerileriniz, hata bildirimleriniz veya katkılarınız için aşağıdaki kanallardan ulaşabilirsiniz:</p>
+      <div class="contact-row">
+        <span>📧</span>
+        <a href="mailto:suleymancetin@engineer.com">suleymancetin@engineer.com</a>
+      </div>
+      <div class="contact-row" style="margin-top:8px;">
+        <span>🐙</span>
+        <a href="https://suleymancetin.com.tr" target="_blank">Oğluma ithaftır. · makam-referans-panosu</a>
+      </div>
+      <p style="margin-top:14px;font-size:.78rem;color:rgba(255,255,255,.35);">Yeni ses kaydı veya link önerilerinizi <strong>makam adı</strong>, <strong>ses türü</strong> ve <strong>kaynak linki</strong> ile birlikte iletebilirsiniz.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ══ MAIN ══ -->
+<div id="main"></div>
+
+<!-- ══ PLAYER BAR ══ -->
+<div id="player">
+  <div class="pl-info">
+    <div class="pl-dot"></div>
+    <span class="pl-lbl">Şu an çalıyor</span>
+    <span class="pl-track" id="pl-track">—</span>
+  </div>
+  <div class="pl-progress-wrap">
+    <span class="pl-time" id="pl-cur">0:00</span>
+    <input type="range" id="pl-seek" min="0" max="100" value="0" step="0.1">
+    <span class="pl-time right" id="pl-dur">0:00</span>
+  </div>
+  <div class="pl-controls">
+    <div class="pl-btns">
+      <button class="pl-btn" id="btn-restart">⏮ Başa Al</button>
+      <button class="pl-btn primary" id="btn-playpause">
+        <span id="pl-pause-icon">⏸</span>
+        <span id="pl-pause-lbl">Duraklat</span>
+      </button>
+      <button class="pl-btn" id="btn-forward">+10s ⏭</button>
+      <button class="pl-btn" id="btn-speed">1×</button>
+    </div>
+    <button class="pl-btn stop" id="btn-stop">■ Durdur</button>
+  </div>
+</div>
+
+<script>
+/* ── helpers ── */
+function fmtTime(s){
+  if(isNaN(s)||!isFinite(s))return'0:00';
+  var m=Math.floor(s/60),sec=Math.floor(s%60);
+  return m+':'+(sec<10?'0':'')+sec;
+}
+
+/* ── hamburger / drawer ── */
+var hamBtn=document.getElementById('ham-btn');
+var drawer=document.getElementById('drawer');
+var drawerOverlay=document.getElementById('drawer-overlay');
+function openDrawer(){drawer.classList.add('open');drawerOverlay.classList.add('open');hamBtn.classList.add('open');}
+function closeDrawer(){drawer.classList.remove('open');drawerOverlay.classList.remove('open');hamBtn.classList.remove('open');}
+hamBtn.addEventListener('click',function(){drawer.classList.contains('open')?closeDrawer():openDrawer();});
+drawerOverlay.addEventListener('click',closeDrawer);
+document.getElementById('drawer-close').addEventListener('click',closeDrawer);
+document.getElementById('menu-home').addEventListener('click',function(){closeDrawer();window.scrollTo({top:0,behavior:'smooth'});});
+
+/* ── modals ── */
+function openModal(id){document.getElementById(id).classList.add('open');}
+function closeModal(id){document.getElementById(id).classList.remove('open');}
+document.getElementById('menu-about').addEventListener('click',function(){closeDrawer();openModal('modal-about');});
+document.getElementById('menu-contact').addEventListener('click',function(){closeDrawer();openModal('modal-contact');});
+document.querySelectorAll('.modal-close').forEach(function(btn){
+  btn.addEventListener('click',function(){closeModal(btn.dataset.close);});
+});
+document.querySelectorAll('.modal-overlay').forEach(function(el){
+  el.addEventListener('click',function(e){if(e.target===el)el.classList.remove('open');});
+});
+
+/* ── player ── */
+var playerEl  =document.getElementById('player');
+var plTrack   =document.getElementById('pl-track');
+var plCur     =document.getElementById('pl-cur');
+var plDur     =document.getElementById('pl-dur');
+var plSeek    =document.getElementById('pl-seek');
+var btnPP     =document.getElementById('btn-playpause');
+var ppIcon    =document.getElementById('pl-pause-icon');
+var ppLbl     =document.getElementById('pl-pause-lbl');
+var btnRestart=document.getElementById('btn-restart');
+var btnFwd    =document.getElementById('btn-forward');
+var btnSpeed  =document.getElementById('btn-speed');
+var btnStop   =document.getElementById('btn-stop');
+
+var curAudio=null,curEl=null;
+var speeds=[1,1.25,1.5,1.75,2],speedIdx=0;
+var seeking=false,rafId=null;
+
+function updateUI(){
+  if(!curAudio)return;
+  var p=curAudio.paused;
+  ppIcon.textContent=p?'▶':'⏸';
+  ppLbl.textContent=p?'Oynat':'Duraklat';
+}
+function updateProgress(){
+  if(!curAudio||seeking)return;
+  var c=curAudio.currentTime,d=curAudio.duration||0;
+  plCur.textContent=fmtTime(c);
+  plDur.textContent=fmtTime(d);
+  if(d>0){
+    var pct=(c/d)*100;
+    plSeek.value=pct;
+    plSeek.style.background='linear-gradient(to right,rgba(232,201,122,.85) '+pct+'%,rgba(255,255,255,.15) '+pct+'%)';
+  }
+}
+function tick(){updateProgress();rafId=requestAnimationFrame(tick);}
+function startTick(){if(!rafId)rafId=requestAnimationFrame(tick);}
+function stopTick(){if(rafId){cancelAnimationFrame(rafId);rafId=null;}}
+
+function stopAudio(){
+  stopTick();
+  if(curAudio){curAudio.pause();curAudio.currentTime=0;curAudio=null;}
+  if(curEl){curEl.classList.remove('playing');curEl=null;}
+  playerEl.classList.remove('visible');
+  plTrack.textContent='—';
+  plSeek.value=0;plSeek.style.background='rgba(255,255,255,.15)';
+  plCur.textContent='0:00';plDur.textContent='0:00';
+  speedIdx=0;btnSpeed.textContent='1×';btnSpeed.classList.remove('speed-active');
+  ppIcon.textContent='▶';ppLbl.textContent='Oynat';
+}
+
+function playEl(el,url,label){
+  el.classList.add('pressing');
+  setTimeout(function(){el.classList.remove('pressing');},150);
+  if(curEl===el&&curAudio&&!curAudio.paused){curAudio.pause();updateUI();return;}
+  if(curEl===el&&curAudio&&curAudio.paused){curAudio.play().catch(function(){});updateUI();startTick();return;}
+  stopAudio();
+  var audio=new Audio(url);
+  curAudio=audio;curEl=el;
+  audio.playbackRate=speeds[speedIdx];
+  el.classList.add('playing');
+  plTrack.textContent=label;
+  playerEl.classList.add('visible');
+  audio.play().catch(function(){});
+  startTick();updateUI();
+  audio.addEventListener('ended',stopAudio);
+}
+
+plSeek.addEventListener('mousedown',function(){seeking=true;});
+plSeek.addEventListener('touchstart',function(){seeking=true;},{passive:true});
+plSeek.addEventListener('input',function(){
+  if(!curAudio)return;
+  var d=curAudio.duration||0;
+  if(d>0)curAudio.currentTime=(plSeek.value/100)*d;
+  updateProgress();
+});
+plSeek.addEventListener('mouseup',function(){seeking=false;});
+plSeek.addEventListener('touchend',function(){seeking=false;});
+
+btnPP.addEventListener('click',function(){
+  if(!curAudio)return;
+  if(curAudio.paused){curAudio.play().catch(function(){});startTick();}
+  else{curAudio.pause();stopTick();}
+  updateUI();
+});
+btnRestart.addEventListener('click',function(){
+  if(!curAudio)return;
+  curAudio.currentTime=0;
+  if(curAudio.paused){curAudio.play().catch(function(){});startTick();updateUI();}
+});
+btnFwd.addEventListener('click',function(){
+  if(!curAudio)return;
+  curAudio.currentTime=Math.min(curAudio.currentTime+10,curAudio.duration||0);
+});
+btnSpeed.addEventListener('click',function(){
+  speedIdx=(speedIdx+1)%speeds.length;
+  var s=speeds[speedIdx];
+  if(curAudio)curAudio.playbackRate=s;
+  btnSpeed.textContent=s+'×';
+  btnSpeed.classList.toggle('speed-active',s!==1);
+});
+btnStop.addEventListener('click',stopAudio);
+
+/* ── BUILD METRO UI ── */
+var mainEl=document.getElementById('main');
+
+/* Responsive: how many big tiles per row?
+   We group them: desktop 3-3, tablet 2-2-2, mobile 2-2-2 or 1 per row.
+   We do 2 rows of 3 big tiles, each big tile has its own small row below.
+   Actually: each "metro-block" = 1 big tile column with its sub-row.
+   We arrange all 6 blocks in a responsive grid wrapper.
+*/
+
+var outerGrid=document.createElement('div');
+outerGrid.style.cssText=
+  'display:grid;'+
+  'grid-template-columns:repeat(3,1fr);'+
+  'gap:0;';
+outerGrid.id='metro-outer';
+
+/* media-query override via a style tag */
+var mqs=document.createElement('style');
+mqs.textContent=
+  '@media(max-width:700px){#metro-outer{grid-template-columns:repeat(2,1fr)!important;}}'+
+  '@media(max-width:400px){#metro-outer{grid-template-columns:repeat(2,1fr)!important;}}';
+document.head.appendChild(mqs);
+
+mainEl.appendChild(outerGrid);
+
+MAKAMLAR.forEach(function(m,i){
+  var col=document.createElement('div');
+  col.style.cssText='display:flex;flex-direction:column;';
+
+  /* ── BIG TILE ── */
+  var bigEmpty=!m.ezanUrl||m.ezanUrl.trim()==='';
+  var big=document.createElement('div');
+  big.className='big-tile'+(bigEmpty?' empty-tile':'');
+  big.style.background=m.bgColor;
+  big.innerHTML=
+    '<div class="big-tile-icon">'+m.icon+'</div>'+
+    '<div class="big-tile-makam">'+m.makam+'</div>'+
+    '<div class="big-tile-vakit">'+m.vakit+'</div>'+
+    '<div class="big-tile-ezan">EZAN</div>';
+  if(!bigEmpty){
+    big.addEventListener('click',(function(el,url,lbl){
+      return function(){playEl(el,url,lbl);};
+    })(big,m.ezanUrl,m.makam+' Makamı – Ezan'));
+  }
+  col.appendChild(big);
+
+  /* ── SMALL 2×2 GRID ──
+     Row 1: [Kamet/Tesbihat split] [İlahi]
+     Row 2: [Kaside]               [Aşr-ı Şerif]
+  */
+  var sg=document.createElement('div');
+  sg.className='small-grid';
+
+  /* helper: plain square tile */
+  function mkSm(label,url,bg){
+    var empty=!url||url.trim()==='';
+    var t=document.createElement('div');
+    t.className='sm-tile'+(empty?' empty-tile':'');
+    t.style.background=bg;
+    t.innerHTML='<span class="sm-label">'+label+'</span>';
+    if(!empty){
+      t.addEventListener('click',(function(el,u,lb){
+        return function(){playEl(el,u,lb);};
+      })(t,url,m.makam+' – '+label));
+    }
+    return t;
+  }
+
+  /* ── 3-row × 2-col grid ──
+     Row 1: Kamet + İlahi
+     Row 2: Tesbihat + Aşr
+     Row 3: Kaside/Mevlid/Salat (full width)
+  */
+  sg.appendChild(mkSm('Kamet', m.kametUrl, m.smColor1));
+  sg.appendChild(mkSm('İlahi', m.ilahiUrl, m.smColor4));
+  sg.appendChild(mkSm('Tesbihat', m.tesbihatUrl, m.smColor1b));
+  sg.appendChild(mkSm(m.kasideLabel||'Kaside', m.kasideUrl, m.smColor3));
+  var as = mkSm('Aşr-ı Şerif', m.asrUrl, m.smColor2);
+  as.style.gridColumn = '1 / -1';
+  sg.appendChild(as);
+
+  col.appendChild(sg);
+  outerGrid.appendChild(col);
+});
+</script>
+</body>
+</html>
