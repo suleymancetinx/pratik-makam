@@ -790,9 +790,9 @@ MAKAMLAR.forEach(function(m,i){
     '<div class="big-tile-icon">'+m.icon+'</div>'+
     '<div class="big-tile-makam">'+m.makam+'</div>'+
     '<div class="big-tile-vakit">'+m.vakit+'</div>'+
-    '<div class="big-tile-ezan">'+(m.vakit==='Sela'?'SALA':'EZAN')+'</div>';
+    '<div class="big-tile-ezan">'+(m.makam==='Hüseyni'?'SALA':'EZAN')+'</div>';
   if(!bigEmpty){
-    var lbl=m.makam+' Makamı – '+(m.vakit==='Sela'?'Sala':'Ezan');
+    var lbl=m.makam+' Makamı – '+(m.makam==='Hüseyni'?'Sala':'Ezan');
     big.addEventListener('click',(function(el,url,lb){
       return function(){playEl(el,url,lb);};
     })(big,m.ezanUrl,lbl));
